@@ -1,4 +1,4 @@
-# from constructor import constructor
+from constructor import constructor
 import customtkinter as ctk
 from handle import Update_files
 from PIL import Image
@@ -9,6 +9,7 @@ class window():
 
     def __init__(self):
        self.handle = Update_files()
+       self.places = constructor()
        
     '''set theme'''
     def time_date(self):
@@ -135,7 +136,8 @@ class window():
                                          text_color=("gray10","gray90"),
                                          hover_color=("gray70","gray30"),
                                          anchor="w",
-                                         image=self.add_image)
+                                         image=self.add_image,
+                                         command=self.provisionar_button_event)
         self.add_button.grid(row=2,column=0,sticky="ew")        
         
         self.home_frame = ctk.CTkFrame(self.main_root,corner_radius=0,fg_color="transparent")
@@ -148,9 +150,32 @@ class window():
         self.home_logo = ctk.CTkLabel(self.home_frame,image=self.logo_image,text="")
         self.home_logo.grid(row=1,column=0,padx=20,pady=20)
         
-        self.home_button.invoke()
         
-               
+        self.provisionar_frame = ctk.CTkFrame(self.main_root,corner_radius=0,fg_color="transparent")
+        self.provisionar_frame.grid_columnconfigure(0,weight=1)
+        
+        self.olt = ctk.CTkOptionMenu(self.provisionar_frame,
+                                     width=170,
+                                     height=40,
+                                     corner_radius=0,
+                                     values = self.places.olts()
+                                     )
+        self.olt.grid(row=0,column=0,padx=20,pady=20)
+        self.olt_button = ctk.CTkButton(self.provisionar_frame,
+                                        text="Open",
+                                        corner_radius=0,
+                                        height=40,
+                                        width=70,
+                                        command=self.open_button_event                              
+                                        )
+        self.olt_button.grid(row=0,column=1,padx=20,pady=20)
+        self.empty1 = ctk.CTkLabel(self.provisionar_frame,width=200,
+                                   height=40,
+                                   text="")
+        self.empty1.grid(row=0,column=2,padx=20,pady=20)
+
+        
+        self.home_button.invoke()       
         self.main_root.mainloop()
             
         
@@ -170,11 +195,21 @@ class window():
                 ...
     def select_frame_by_name(self, name):
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "Home" else "transparent")
+        self.add_button.configure(fg_color=("gray25", "gray25") if name == "Provisionar" else "transparent")
         
         if name == "Home":
             self.home_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.home_frame.grid_forget()
+        
+        if name == "Provisionar":
+            self.provisionar_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.provisionar_frame.grid_forget()
             
     def home_button_event(self):
         self.select_frame_by_name("Home")
+    def provisionar_button_event(self):
+        self.select_frame_by_name("Provisionar")
+    def open_button_event(self):
+        self.places.putty_open(str(self.olt.get()))

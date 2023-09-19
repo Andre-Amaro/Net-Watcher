@@ -39,17 +39,24 @@ class Update_files():
                 self.user = users[i]
                 break
         for i in passw:
-            if i == self.user:
+            if i == local:
                 self.passw = passw[i]
                 break
             
-        return sp.Popen(f'PuTTY.exe {self.user}@{self.ip} -pw {self.passw}')
+
+            
+
+        if self.user == self.passw:
+            return sp.Popen(f'PuTTY.exe -telnet {self.ip} -l {self.user}')
+        else:
+            return sp.Popen(f'PuTTY.exe {self.user}@{self.ip} -pw {self.passw}')
+      
         
     def login_handle(self, username,password):
         if username == 'noc' and password == '38302650':
              return True         
         else: return False
 
-                
+
 
             

@@ -7,8 +7,13 @@ class constructor():
         self.data = Update_files()
         self.OLT = self.data.dict_maker(controler=self.URL,key=3,value=4)
         self.USERS = self.data.dict_maker(controler=self.URL,key=3,value=6)
-        self.PASS = self.data.dict_maker(controler=self.URL,key=6,value=7)
+        self.PASS = self.data.dict_maker(controler=self.URL,key=3,value=7)
+        self.olt_name = []
     
     def putty_open(self,place):
-        
         self.data.open(self.OLT,place,self.USERS,self.PASS)
+
+    def olts(self):
+        for i in self.OLT:
+            self.olt_name.append(i)
+        return self.olt_name
