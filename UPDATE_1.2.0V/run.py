@@ -5,4 +5,4 @@ screen = window()
 d = Update_files()
 if __name__ == '__main__':
 
-    screen.main_screen()
+    screen.login()
