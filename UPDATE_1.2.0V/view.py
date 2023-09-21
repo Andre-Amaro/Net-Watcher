@@ -91,10 +91,10 @@ class window():
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "IMG")
         self.home_image = ctk.CTkImage(light_image=Image.open(os.path.join(image_path, "home_light.png")),size=(20,20))
         self.add_image = ctk.CTkImage(light_image=Image.open(os.path.join(image_path, "add_user_light.png")),size=(20,20))
-        self.logo_image = ctk.CTkImage(Image.open(os.path.join(image_path, "logo.png")), size=(340,200 ))
+        self.logo_image = ctk.CTkImage(Image.open(os.path.join(image_path, "logo.png")), size=(240,150 ))
         
         self.main_root = ctk.CTk()
-        self.main_root.geometry('700x450')  # screen size
+        self.main_root.geometry('650x400')  # screen size
         self.main_root.title("Net Vale")  # screen title
         # root.iconbitmap('Prov/img/rikka.ico')  #screen icon
         self.main_root.eval('tk::PlaceWindow . center')  # make window center
@@ -155,26 +155,123 @@ class window():
         self.provisionar_frame.grid_columnconfigure(0,weight=1)
         
         self.olt = ctk.CTkOptionMenu(self.provisionar_frame,
-                                     width=170,
+                                     width=120,
                                      height=40,
                                      corner_radius=0,
                                      values = self.places.olts()
                                      )
-        self.olt.grid(row=0,column=0,padx=20,pady=20)
+        self.olt.grid(row=0,column=0,columnspan=2,padx=20,pady=20)
+        
+        self.sn_entry = ctk.CTkEntry(self.provisionar_frame,
+                                     width=120,
+                                     height=40,
+                                     corner_radius=0,
+                                     placeholder_text="TPLGBb4b5b32"
+                                     )
+        self.sn_entry.grid(row=1,column=0,padx=20,pady=20)
+        
+        self.gpon_entry = ctk.CTkEntry(self.provisionar_frame,
+                                            width=55,
+                                            height=40,
+                                            corner_radius=0,
+                                            placeholder_text="Gpon")
+        self.gpon_entry.grid(row=1,column=1,padx=10,pady=20,sticky="w")
+        
+        self.onu_entry = ctk.CTkEntry(self.provisionar_frame,
+                                            width=55,
+                                            height=40,
+                                            corner_radius=0,
+                                            placeholder_text="Onu")
+        self.onu_entry.grid(row=1,column=1,padx=10,pady=20,sticky="e")
+        
+        self.chassi_option = ctk.CTkOptionMenu(self.provisionar_frame,
+                                              width=120,
+                                              height=40,
+                                              corner_radius=0,
+                                              values= self.places.chassis())
+        self.chassi_option.grid(row=1,column=2,padx=20,pady=20)
+        
+
+        
+        self.description_entry = ctk.CTkEntry(self.provisionar_frame,
+                                     width=120,
+                                     height=40,
+                                     corner_radius=0,
+                                     placeholder_text="João e maria Cx25-P3"
+                                     )
+        self.description_entry.grid(row=2,column=0,padx=20,pady=20)
+        
+        self.type_option = ctk.CTkOptionMenu(self.provisionar_frame,
+                                            width=120,
+                                            height=40,
+                                            corner_radius=0,
+                                            values = self.places.type_option_menu(),
+                                            dynamic_resizing=False
+                                            )
+        self.type_option.grid(row=2,column=2,padx=20,pady=20)
+        
+        self.type_option.set("Modelo")
+        self.chassi_option.set("Chassi")
+        self.olt.set("Regiões")
+        
+        self.vlan_entry = ctk.CTkEntry(self.provisionar_frame,
+                                     width=70,
+                                     height=40,
+                                     corner_radius=0,
+                                     placeholder_text="15"
+                                     )
+        self.vlan_entry.grid(row=2,column=1,padx=20,pady=20)
+        
+        self.pppoe_entry = ctk.CTkEntry (self.provisionar_frame,
+                                         width=120,
+                                         height=40,
+                                         corner_radius=0,
+                                         placeholder_text="cliente@netvale.psi.br"
+                                         )
+        self.pppoe_entry.grid(row=3,column=0,columnspan=2,padx=20,pady=20)
+        
+        self.pppoe_pass_entry = ctk.CTkEntry (self.provisionar_frame,
+                                         width=120,
+                                         height=40,
+                                         corner_radius=0,
+                                         placeholder_text="cliente123"
+                                         )
+        self.pppoe_pass_entry.grid(row=3,column=1,columnspan=2,padx=20,pady=20)
+        
+        self.prov_button = ctk.CTkButton(self.provisionar_frame,
+                                           width=120,
+                                           height=40,
+                                           text="Provisionar",
+                                           corner_radius=0,
+                                           command=self.prov_event)
+        self.prov_button.grid(row=5,column=2,pady=20,padx=20)
+        
+        self.slot_button = ctk.CTkButton(self.provisionar_frame,
+                                         width=120,
+                                         height=40,
+                                         corner_radius=0,
+                                         text="Slots",
+                                         command=self.slots_button_event)
+        self.slot_button.grid(row=5,column=1,padx=20,pady=20)
+        
+        self.search_button = ctk.CTkButton(self.provisionar_frame,
+                                           width=120,
+                                           height=40,
+                                           text="Search",
+                                           corner_radius=0,
+                                           command=self.search_button_event)
+        self.search_button.grid(row=5,column=0,pady=20,padx=20)
+        
         self.olt_button = ctk.CTkButton(self.provisionar_frame,
                                         text="Open",
                                         corner_radius=0,
                                         height=40,
-                                        width=70,
+                                        width=120,
                                         command=self.open_button_event                              
                                         )
-        self.olt_button.grid(row=0,column=1,padx=20,pady=20)
-        self.empty1 = ctk.CTkLabel(self.provisionar_frame,width=200,
-                                   height=40,
-                                   text="")
-        self.empty1.grid(row=0,column=2,padx=20,pady=20)
-
+        self.olt_button.grid(row=0,column=1,columnspan=2,padx=20,pady=20)
         
+ 
         self.home_button.invoke()       
         self.main_root.mainloop()
             
@@ -209,7 +306,74 @@ class window():
             
     def home_button_event(self):
         self.select_frame_by_name("Home")
+        
     def provisionar_button_event(self):
         self.select_frame_by_name("Provisionar")
+        
     def open_button_event(self):
         self.places.putty_open(str(self.olt.get()))
+        
+    def search_button_event(self):
+        try:
+            self.handle.search_equip(self.places.comand_controller(str(self.olt.get())),
+                                    self.places.ip_get(str(self.olt.get())))
+        except Exception:
+            notification = ctk.CTkInputDialog(text="OLT not opened",
+                                                title="Fail to write",
+                                                )
+    def slots_button_event(self):
+        self.handle.slot_search(name=self.places.ip_get(str(self.olt.get())),
+                                equip=self.places.comand_controller(str(self.olt.get())),
+                                gpon=self.gpon_entry.get(),
+                                chassi=str(self.chassi_option.get())
+                                )
+    def zte_intelbras(self):
+       self.itbr = self.handle.model_change(equip=self.places.comand_controller(str(self.olt.get())),
+                                 model=self.places.type_get(self.type_option.get(),self.places.comand_controller(str(self.olt.get()))))
+       return self.itbr
+    def prov_ZTE_BRIDGE(self):
+        try:
+            self.handle.zte_bridge(name=self.places.ip_get(str(self.olt.get())),
+                                   gpon=self.gpon_entry.get(),
+                                   slot=self.onu_entry.get(),
+                                   vlan=self.handle.vlan_check(self.vlan_entry.get()),
+                                   typ=self.zte_intelbras(),
+                                   sn=self.sn_entry.get(),
+                                   description=self.description_entry.get(),
+                                   chassi=self.chassi_option.get())
+        except Exception:
+            notification = ctk.CTkInputDialog(text="information missing",
+                                                title="missing information",
+                                                )
+    def prov_ZTE_PPPOE(self):
+        try:
+            self.handle.zte_pppoe(name=self.places.ip_get(str(self.olt.get())),
+                                   gpon=self.gpon_entry.get(),
+                                   slot=self.onu_entry.get(),
+                                   vlan=self.handle.vlan_check(self.vlan_entry.get()),
+                                   typ=self.zte_intelbras(),
+                                   sn=self.sn_entry.get(),
+                                   description=self.description_entry.get(),
+                                   chassi=self.chassi_option.get(),
+                                   pppoe=self.pppoe_entry.get(),
+                                   pppoe_pass=self.pppoe_pass_entry.get())
+        except Exception:
+            notification = ctk.CTkInputDialog(text="information missing",
+                                                title="missing information",
+                                                )
+    def zte_controller(self):
+        if self.pppoe_entry.get() == "":
+            return self.prov_ZTE_BRIDGE()
+        else:
+            return self.prov_ZTE_PPPOE()
+    def prov_event(self):
+        self._ = self.places.comand_controller(str(self.olt.get()))
+        if self._ == "ZTE":
+           return self.zte_controller()
+        elif self._ =="NOVA":
+            return self.prov_nova()
+        elif self._ =="VELHA":
+            return self.prov_velha()
+        elif self._ =="CIANET":
+            return self.prov_cianet()
+        
