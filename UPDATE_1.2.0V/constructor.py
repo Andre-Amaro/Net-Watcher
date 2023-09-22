@@ -3,7 +3,7 @@ from handle import  Update_files
 class constructor():
     
     def __init__(self):
-        self.URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ39yLOYP5IUtaCky0lRlNttc7cJw9SYXqegdExF12Tn0ItSM1RwX3kwCO9XMZQX-thkYPrSUZn5DUB/pub?gid=2084143333&single=true&output=csv"
+        self.URL = "###YOUR URL####"
         self.data = Update_files()
         self.OLT = self.data.dict_maker(controler=self.URL,key=3,value=4)
         self.USERS = self.data.dict_maker(controler=self.URL,key=3,value=6)
@@ -51,7 +51,8 @@ class constructor():
                 if i == typ:
                     return i
             else:
-                return self.TYPE[i]
+                if i == typ:
+                    return self.TYPE[i]
         
     def type_option_menu(self):
         for i in self.TYPE:

@@ -332,7 +332,7 @@ class window():
                                  model=self.places.type_get(self.type_option.get(),self.places.comand_controller(str(self.olt.get()))))
        return self.itbr
     def prov_ZTE_BRIDGE(self):
-        try:
+ 
             self.handle.zte_bridge(name=self.places.ip_get(str(self.olt.get())),
                                    gpon=self.gpon_entry.get(),
                                    slot=self.onu_entry.get(),
@@ -341,10 +341,7 @@ class window():
                                    sn=self.sn_entry.get(),
                                    description=self.description_entry.get(),
                                    chassi=self.chassi_option.get())
-        except Exception:
-            notification = ctk.CTkInputDialog(text="information missing",
-                                                title="missing information",
-                                                )
+            
     def prov_ZTE_PPPOE(self):
         try:
             self.handle.zte_pppoe(name=self.places.ip_get(str(self.olt.get())),
@@ -366,6 +363,30 @@ class window():
             return self.prov_ZTE_BRIDGE()
         else:
             return self.prov_ZTE_PPPOE()
+    def prov_nova(self):
+        self.handle.nova(name=self.places.ip_get(str(self.olt.get())),
+                        gpon=self.gpon_entry.get(),
+                        slot=self.onu_entry.get(),
+                        vlan=self.handle.vlan_check(self.vlan_entry.get()),     
+                        sn=self.sn_entry.get(),
+                        description=self.description_entry.get(),
+                        typ=self.places.type_get(self.type_option.get(),self.places.comand_controller(str(self.olt.get()))))
+    def prov_velha(self):
+        self.handle.velha(name=self.places.ip_get(str(self.olt.get())),
+                        gpon=self.gpon_entry.get(),
+                        slot=self.onu_entry.get(),
+                        vlan=self.handle.vlan_check(self.vlan_entry.get()),     
+                        sn=self.sn_entry.get(),
+                        description=self.description_entry.get(),
+                        typ=self.places.type_get(self.type_option.get(),self.places.comand_controller(str(self.olt.get()))))
+    def prov_cianet(self):
+        self.handle.cianet(name=self.places.ip_get(str(self.olt.get())),
+                        gpon=self.gpon_entry.get(),
+                        slot=self.onu_entry.get(),
+                        vlan=self.handle.vlan_check(self.vlan_entry.get()),     
+                        sn=self.sn_entry.get(),
+                        description=self.description_entry.get())
+        
     def prov_event(self):
         self._ = self.places.comand_controller(str(self.olt.get()))
         if self._ == "ZTE":

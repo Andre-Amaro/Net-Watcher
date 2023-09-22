@@ -132,12 +132,15 @@ class Update_files():
         kb.write(f"service 1 gemport 1 vlan {vlan}\n")
         kb.write(f"vlan port eth_0/1 mode tag vlan {vlan}\n")
         kb.write(f"exit\n")
-        kb.write(f"exit\n") 
+        kb.write(f"exit\n")
+        kb.write(f"show pon power attenuation gpon_onu-1/{chassi}/{gpon}:{slot}\n") 
+        
+        
         
     def zte_pppoe(self,name,gpon,slot,vlan,typ,sn,description,pppoe,pppoe_pass,chassi=3):
-        time.sleep(5)
-        # self.wf.find_window_wildcard(f"{name} - PuTTY")
-        # self.wf.set_foreground()
+  
+        self.wf.find_window_wildcard(f"{name} - PuTTY")
+        self.wf.set_foreground()
         
         kb.write(f"conf t\n")
         kb.write(f"interface gpon_olt-1/{chassi}/{gpon}\n")
@@ -158,18 +161,57 @@ class Update_files():
         kb.write(f"security-mgmt 80 state enable mode forward ingress-type iphost 1 protocol web\n")
         kb.write(f"exit\n")
         kb.write(f"exit\n") 
+        kb.write(f"show pon power attenuation gpon_onu-1/{chassi}/{gpon}:{slot}\n") 
+        
+     
 
-    def other_nova(self,name,gpon,slot,vlan,sn,description):
+        
+    def nova(self,name,gpon,slot,vlan,sn,description,typ):
+
         self.wf.find_window_wildcard(f"{name} - PuTTY")
         self.wf.set_foreground()
             
-        kb.write(f"""onu set gpon {gpon} onu {slot} serial-number {sn} meprof intelbras-default
-                     bridge add gpon {gpon} onu {slot} downlink vlan {vlan} tagged eth 1
-                    onu description add gpon {gpon} onu {slot} text {str(description).replace(" ", "_").upper()}
-                    {time.sleep(1)}
-                    onu status gpon {gpon} onu {slot}
-                 """)
+        kb.write(f"onu set gpon {gpon} onu {slot} serial-number {typ}{sn} meprof intelbras-default\n")
+        time.sleep(0.7)
+        kb.write(f"bridge add gpon {gpon} onu {slot} downlink vlan {vlan} tagged eth 1\n")
+        time.sleep(1) 
+        kb.write(f"onu description add gpon {gpon} onu {slot} text {str(description).replace(' ', '_').upper()}\n")
+        kb.write(f"onu status gpon {gpon} onu {slot}\n")
+                
     def velha(self,name,gpon,slot,vlan,sn,description,typ):
+
         self.wf.find_window_wildcard(f"{name} - PuTTY")
         self.wf.set_foreground()
+
+        kb.write(f"onu set 1/{gpon}/{slot} meprof intelbras-110g vendorid ZNTS serno fsan {sn}\n")
+        time.sleep(2)
+        kb.write(f"create gpon-olt-onu-config 1-1-{gpon}-{slot}/gpononu \n")
+        time.sleep(1)
+        kb.write(f"set serial-no-vendor-id={typ} \n")
+        time.sleep(1)
+        kb.write(f"commit gpon-olt-onu-config 1-1-{gpon}-{slot}/gpononu \n")
+        time.sleep(1)
+        kb.write(f"bridge add 1-1-{gpon}-{slot}/gpononu downlink vlan {vlan} tagged eth 1 \n")
+        time.sleep(3)
+        kb.write(f'port description add 1-1-{gpon}-{slot} "{description}" \n')
+        time.sleep(1)
+        kb.write(f"onu inventory 1/{gpon}/{slot} \n")
     
+    def cianet(self,name,gpon,slot,vlan,sn,description):
+  
+        self.wf.find_window_wildcard(f"{name} - PuTTY")
+        self.wf.set_foreground()
+        
+        kb.write(f"onu {slot} type 1porta sn {sn} \n")
+        kb.write(f"interface gpon-onu 1/{gpon}:{slot} \n")
+        kb.write(f"tcont 1 profile giga	\n")
+        kb.write(f"gemport 1 tcont 1 \n")
+        kb.write(f"service-port 1 gemport 1 user-vlan untagged vlan-add {vlan} \n")
+        kb.write(f"remote service 1 gem 1\n")
+        kb.write(f"remote uni eth_1/1 vlan-mode transparent	\n")
+        kb.write(f"name {description}\n")
+        kb.write(f"show onu power \n")
+        time.sleep(1)
+        kb.write(f"exit\n")
+        kb.write(f"exit\n")
+        kb.write(f"write\n")
